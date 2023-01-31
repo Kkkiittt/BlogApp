@@ -29,6 +29,15 @@ public class UserController : Controller
 				return Register();
 		return Register();
 	}
+	[HttpGet("logout")]
+	public async Task<IActionResult> LogoutAsync()
+	{
+		HttpContext.Response.Cookies.Append("X-Access-Token", "", new CookieOptions
+		{
+			Expires = DateTime.Now.AddDays(-1)
+		});
+		return RedirectToAction("login", "users");
+	}
 	[HttpGet("login")]
 	public ViewResult Login()
 	{

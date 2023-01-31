@@ -57,6 +57,18 @@ public class ArticleService : BaseService, IArticleService
 		return _viewModel.To(entity);
 	}
 
+	public async Task<IEnumerable<ArticleBaseViewModel>> SearchAsync(string name, PaginationParams @params)
+	{
+		return (await _paginator.PaginateAsync(_repository.GetAll()
+			.OrderByDescending(x => x.Title == name)
+			.ThenByDescending(x => x.Title.ToLower().StartsWith(name.ToLower()))
+			.ThenByDescending(x => x.Title.ToLower().EndsWith(name.ToLower()))
+			.ThenByDescending(x => x.Title.ToLower().Contains(name.ToLower()))
+			.ThenByDescending(x => x.Content.ToLower().Contains(name.ToLower()))
+			, @params))
+			.Select(x => _viewModel.ToBase(x));
+	}
+
 	public async Task<bool> UpdateAsync(ArticleCreateDto dto, int id)
 	{
 		var entity = await _dto.ToEntity(dto);

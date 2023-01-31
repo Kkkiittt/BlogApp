@@ -1,11 +1,14 @@
 using BlogApp.Web.Configurations;
+using BlogApp.Web.Middlewares;
 
 var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddHttpContextAccessor();
 builder.Services.AddControllersWithViews();
+AppContext.SetSwitch("Npgsql.EnableLegacyTimestampBehavior", true);
 builder.ConfigureDataAccess();
 builder.ConfigureService();
+builder.ConfigureAuth();
 var app = builder.Build();
 if(!app.Environment.IsDevelopment())
 {
@@ -15,6 +18,8 @@ if(!app.Environment.IsDevelopment())
 app.UseHttpsRedirection();
 app.UseStaticFiles();
 app.UseRouting();
+app.UseMiddleware<TokenRedirectMiddleWare>();
+app.UseAuthentication();
 app.UseAuthorization();
 app.MapControllerRoute(
 	name: "default",

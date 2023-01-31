@@ -1,0 +1,7 @@
+﻿@using BlogApp.Service.Dtos.Articles;
+@model ArticleCreateDto
+<form asp-action="" asp-controller="articles" method="post">
+	<input type="text" asp-for=Title placeholder="Title">
+	<input type="text" asp-for=Content placeholder="Content">
+	<input type="submit">
+</form>

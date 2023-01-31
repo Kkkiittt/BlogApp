@@ -1,0 +1,19 @@
+﻿@using BlogApp.Service.ViewModels.Articles;
+@model IEnumerable<ArticleBaseViewModel>
+@{
+	foreach(var article in Model)
+	{
+		<div>
+			<h2 style="float:left">@article.Title</h2>
+			<h3 style="float:right">@article.Created</h3>
+			@{
+				if(article.IsUpdated)
+				{
+					<h3>
+						<span style='content: "\270F";'>&#9999;</span>
+					</h3>
+				}
+			}
+		</div>
+	}
+}

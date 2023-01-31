@@ -2,10 +2,12 @@
 using BlogApp.Service.Dtos.Articles;
 using BlogApp.Service.Interfaces;
 
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace BlogApp.Web.Controllers;
 [Route("articles")]
+[Authorize]
 public class ArticleController : Controller
 {
 	private readonly IArticleService _service;
@@ -26,7 +28,7 @@ public class ArticleController : Controller
 	{
 		if(ModelState.IsValid)
 			if(await _service.CreateAsync(dto))
-				return RedirectToAction("all/1", "articles");
+				return RedirectToAction("all/", "articles", 1);
 			else
 				return Create();
 		else
@@ -54,10 +56,15 @@ public class ArticleController : Controller
 	{
 		return View("All", await _service.GetAllAsync(new PaginationParams(_pageSize, page)));
 	}
-	[HttpGet("find/{title}")]
-	public async Task<ViewResult> FindAsync(string title)
+	[HttpGet("search")]
+	public ViewResult SearchAsync()
 	{
-		return View("One", await _service.GetAsync(title));
+		return View("Search");
+	}
+	[HttpPost("search")]
+	public async Task<IActionResult> SearchAsync(string title, int page = 1)
+	{
+		return View("All", await _service.SearchAsync(title, new PaginationParams(page, _pageSize)));
 	}
 	[HttpGet("{id}")]
 	public async Task<ViewResult> GetAsync(int id)
