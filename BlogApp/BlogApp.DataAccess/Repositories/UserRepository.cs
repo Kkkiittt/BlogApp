@@ -34,6 +34,7 @@ public class UserRepository : IUserRepository
 		{
 			throw new Exception("User not found");
 		}
+		await _dbContext.Entry(entity).Collection(x => x.Articles).LoadAsync();
 		return entity;
 	}
 
@@ -44,6 +45,7 @@ public class UserRepository : IUserRepository
 		{
 			throw new Exception("User not found");
 		}
+		await _dbContext.Entry(entity).Collection(x => x.Articles).LoadAsync();
 		return entity;
 	}
 

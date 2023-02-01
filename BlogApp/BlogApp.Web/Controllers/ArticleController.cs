@@ -23,12 +23,17 @@ public class ArticleController : Controller
 	{
 		return View("Create");
 	}
+	[HttpGet]
+	public ViewResult Index()
+	{
+		return View("Main");
+	}
 	[HttpPost]
 	public async Task<IActionResult> CreateAsync(ArticleCreateDto dto)
 	{
 		if(ModelState.IsValid)
 			if(await _service.CreateAsync(dto))
-				return RedirectToAction("all/", "articles", 1);
+				return RedirectToAction("all", "articles");
 			else
 				return Create();
 		else
@@ -51,10 +56,11 @@ public class ArticleController : Controller
 		else
 			return Create();
 	}
-	[HttpGet("all/{page}")]
-	public async Task<ViewResult> GetAllAsync(int page = 1)
+	[HttpGet("all")]
+	public async Task<ViewResult> GetAllAsync([FromQuery] int page = 1)
 	{
-		return View("All", await _service.GetAllAsync(new PaginationParams(_pageSize, page)));
+		ViewBag.Title = $"All Articles: page {page}";
+		return View("All", await _service.GetAllAsync(new PaginationParams(page, _pageSize)));
 	}
 	[HttpGet("search")]
 	public ViewResult SearchAsync()
@@ -64,7 +70,7 @@ public class ArticleController : Controller
 	[HttpPost("search")]
 	public async Task<IActionResult> SearchAsync(ArticleSearchDto dto)
 	{
-		ViewBag.Title =$"Search results for \"{dto.Title}\"";
+		ViewBag.Title = $"Search results for \"{dto.Title}\"";
 		return View("All", await _service.SearchAsync(dto.Title, new PaginationParams(dto.Page, _pageSize)));
 	}
 	[HttpGet("{id}")]

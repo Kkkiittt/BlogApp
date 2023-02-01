@@ -6,7 +6,6 @@ using BlogApp.Service.Interfaces.Common;
 using BlogApp.Service.ViewModels.Users;
 
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.Extensions.Configuration;
 
 namespace BlogApp.Service.Services;
 
@@ -23,7 +22,7 @@ public class UserService : BaseService, IUserService
 	{
 		int? id = _identity.Id;
 		if(id == null)
-			throw new Exception("Not authorized");
+			throw new Exception("Unauthorized");
 		return await _repository.DeleteAsync((int)id);
 	}
 
@@ -50,18 +49,11 @@ public class UserService : BaseService, IUserService
 		return await _repository.AddAsync(await _dto.ToEntity(dto));
 	}
 
-	public async Task<bool> UpdateAsync(UserRegisterDto dto, int id)
+	public async Task<bool> UpdateAsync(UserRegisterDto dto)
 	{
 		var entity = await _dto.ToEntity(dto);
-		entity.Id = id;
+		entity.Id = _identity.Id is not null ? (int)_identity.Id : throw new Exception("Unauthorized");
 		entity.Updated = DateTime.Now;
 		return await _repository.UpdateAsync(entity);
-	}
-	public int Id
-	{
-		get
-		{
-			return _identity.Id is null ? 0 : (int)_identity.Id;
-		}
 	}
 }

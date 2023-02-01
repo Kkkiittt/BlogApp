@@ -1,3 +1,5 @@
+using System.Net;
+
 using BlogApp.Web.Configurations;
 using BlogApp.Web.Middlewares;
 
@@ -15,6 +17,13 @@ if(!app.Environment.IsDevelopment())
 	app.UseExceptionHandler("/Home/Error");
 	app.UseHsts();
 }
+app.UseStatusCodePages(async context =>
+{
+	if(context.HttpContext.Response.StatusCode == (int)HttpStatusCode.Unauthorized)
+	{
+		context.HttpContext.Response.Redirect("../users/login");
+	}
+});
 app.UseHttpsRedirection();
 app.UseStaticFiles();
 app.UseRouting();

@@ -72,15 +72,22 @@ public class UserController : Controller
 			return RedirectToAction("update", "users");
 	}
 	[HttpGet("update")]
-	public async ViewResult Update()
+	public async Task<IActionResult> UpdateAsync()
 	{
-		return View("Info", await _service.GetAsync(null));
+		try
+		{
+			return View("Info", await _service.GetAsync(null));
+		}
+		catch(Exception ex) when(ex.Message == "Unauthorized")
+		{
+			return RedirectToAction("login", "users");
+		}
 	}
-	[HttpPut("{id}")]
-	public async Task<IActionResult> UpdateAsync(UserRegisterDto dto, int id)
+	[HttpPut("")]
+	public async Task<IActionResult> UpdateAsync(UserRegisterDto dto)
 	{
 		if(ModelState.IsValid)
-			if(await _service.UpdateAsync(dto, id))
+			if(await _service.UpdateAsync(dto))
 				return RedirectToAction("", "articles");
 			else
 				return await UpdateAsync();

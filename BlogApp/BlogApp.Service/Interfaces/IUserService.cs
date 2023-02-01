@@ -6,7 +6,7 @@ namespace BlogApp.Service.Interfaces;
 public interface IUserService
 {
 	public Task<bool> RegisterAsync(UserRegisterDto dto);
-	public Task<bool> UpdateAsync(UserRegisterDto dto, int id);
+	public Task<bool> UpdateAsync(UserRegisterDto dto);
 	public Task<string> LoginAsync(UserLoginDto dto);
 	public Task<UserViewModel> GetAsync(int? id);
 	public Task<bool> DeleteAsync();
