@@ -72,7 +72,7 @@ public class UserController : Controller
 			return RedirectToAction("update", "users");
 	}
 	[HttpGet("update")]
-	public async Task<ViewResult> UpdateAsync()
+	public async ViewResult Update()
 	{
 		return View("Info", await _service.GetAsync(null));
 	}
