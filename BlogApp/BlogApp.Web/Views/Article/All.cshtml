@@ -1,6 +1,7 @@
 ﻿@using BlogApp.Service.ViewModels.Articles;
 @model IEnumerable<ArticleBaseViewModel>
 @{
+	<h1>@ViewBag.Title</h1>
 	foreach(var article in Model)
 	{
 		<div>
@@ -15,5 +16,6 @@
 				}
 			}
 		</div>
+		<hr>
 	}
 }

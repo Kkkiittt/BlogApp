@@ -1,7 +1,7 @@
 ﻿@using BlogApp.Service.Dtos.Users;
 @model UserLoginDto
 <form asp-action="login" asp-controller="users">
-	<input type="email" asp-for=Email>
-	<input type="password" asp-for=Password>
+	<input type="email" asp-for=Email placeholder="Email">
+	<input type="password" asp-for=Password placeholder="Password">
 	<input type="submit">
 </form>

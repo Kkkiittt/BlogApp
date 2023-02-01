@@ -1,5 +1,6 @@
-﻿<form asp-action="search" asp-controller="articles" method="post">
-	<input type="text" asp-route="title">
-	<input type="number" asp-route="page">
+﻿@using BlogApp.Service.Dtos.Articles;
+@model ArticleSearchDto
+<form asp-action="search" asp-controller="articles" method="post">
+	<input type="text" asp-for=Title placeholder="Key word">
 	<input type="submit" value="Search">
 </form>

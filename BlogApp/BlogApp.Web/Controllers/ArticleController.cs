@@ -62,9 +62,10 @@ public class ArticleController : Controller
 		return View("Search");
 	}
 	[HttpPost("search")]
-	public async Task<IActionResult> SearchAsync(string title, int page = 1)
+	public async Task<IActionResult> SearchAsync(ArticleSearchDto dto)
 	{
-		return View("All", await _service.SearchAsync(title, new PaginationParams(page, _pageSize)));
+		ViewBag.Title =$"Search results for \"{dto.Title}\"";
+		return View("All", await _service.SearchAsync(dto.Title, new PaginationParams(dto.Page, _pageSize)));
 	}
 	[HttpGet("{id}")]
 	public async Task<ViewResult> GetAsync(int id)

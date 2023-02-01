@@ -60,7 +60,7 @@ public class ArticleService : BaseService, IArticleService
 	public async Task<IEnumerable<ArticleBaseViewModel>> SearchAsync(string name, PaginationParams @params)
 	{
 		return (await _paginator.PaginateAsync(_repository.GetAll()
-			.OrderByDescending(x => x.Title == name)
+			.OrderByDescending(x => x.Title.ToLower() == name.ToLower())
 			.ThenByDescending(x => x.Title.ToLower().StartsWith(name.ToLower()))
 			.ThenByDescending(x => x.Title.ToLower().EndsWith(name.ToLower()))
 			.ThenByDescending(x => x.Title.ToLower().Contains(name.ToLower()))

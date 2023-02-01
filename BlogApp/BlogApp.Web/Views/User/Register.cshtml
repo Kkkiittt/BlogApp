@@ -1,8 +1,8 @@
 ﻿@using BlogApp.Service.Dtos.Users;
 @model UserRegisterDto
 <form asp-action="register" asp-controller="users">
-	<input type="text" asp-for=Name>
-	<input type="email" asp-for=Email>
-	<input type="password" asp-for=Password>
+	<input type="text" asp-for=Name placeholder="Name">
+	<input type="email" asp-for=Email placeholder="Email">
+	<input type="password" asp-for=Password placeholder="Password">
 	<input type="submit">
 </form>
