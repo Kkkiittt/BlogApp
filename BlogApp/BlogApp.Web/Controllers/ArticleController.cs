@@ -57,10 +57,13 @@ public class ArticleController : Controller
 			return Create();
 	}
 	[HttpGet("all")]
-	public async Task<ViewResult> GetAllAsync([FromQuery] int page = 1)
+	public async Task<IActionResult> GetAllAsync([FromQuery] int page = 1)
 	{
-		ViewBag.Title = $"All Articles: page {page}";
-		return View("All", await _service.GetAllAsync(new PaginationParams(page, _pageSize)));
+		return await SearchAsync(new ArticleViewDto
+		{
+			Title = "",
+			Page = page,
+		});
 	}
 	[HttpGet("search")]
 	public ViewResult SearchAsync()
@@ -68,10 +71,10 @@ public class ArticleController : Controller
 		return View("Search");
 	}
 	[HttpPost("search")]
-	public async Task<IActionResult> SearchAsync(ArticleSearchDto dto)
+	public async Task<IActionResult> SearchAsync(ArticleViewDto dto)
 	{
 		ViewBag.Title = $"Search results for \"{dto.Title}\"";
-		return View("All", await _service.SearchAsync(dto.Title, new PaginationParams(dto.Page, _pageSize)));
+		return View("All", new ArticleViewDto() { Articles = await _service.SearchAsync(dto, new PaginationParams(dto.Page, _pageSize)) });
 	}
 	[HttpGet("{id}")]
 	public async Task<ViewResult> GetAsync(int id)

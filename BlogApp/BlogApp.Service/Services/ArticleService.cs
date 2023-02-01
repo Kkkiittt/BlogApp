@@ -1,6 +1,8 @@
 ﻿using BlogApp.DataAccess.Interfaces;
+using BlogApp.Domain.Entities;
 using BlogApp.Service.Common.Utils;
 using BlogApp.Service.Dtos.Articles;
+using BlogApp.Service.Enums;
 using BlogApp.Service.Interfaces;
 using BlogApp.Service.Interfaces.Common;
 using BlogApp.Service.ViewModels.Articles;
@@ -57,16 +59,23 @@ public class ArticleService : BaseService, IArticleService
 		return _viewModel.To(entity);
 	}
 
-	public async Task<IEnumerable<ArticleBaseViewModel>> SearchAsync(string name, PaginationParams @params)
+	public async Task<IEnumerable<ArticleBaseViewModel>> SearchAsync(ArticleViewDto dto, PaginationParams @params)
 	{
-		return (await _paginator.PaginateAsync(_repository.GetAll()
-			.OrderByDescending(x => x.Title.ToLower() == name.ToLower())
-			.ThenByDescending(x => x.Title.ToLower().StartsWith(name.ToLower()))
-			.ThenByDescending(x => x.Title.ToLower().EndsWith(name.ToLower()))
-			.ThenByDescending(x => x.Title.ToLower().Contains(name.ToLower()))
-			.ThenByDescending(x => x.Content.ToLower().Contains(name.ToLower()))
-			, @params))
-			.Select(x => _viewModel.ToBase(x));
+		IOrderedQueryable<Article> query = _repository.GetAll().OrderBy(x => 0);
+		if(!string.IsNullOrEmpty(dto.Title))
+		{
+			query = query
+			.OrderByDescending(x => x.Title.ToLower() == dto.Title.ToLower())
+			.ThenByDescending(x => x.Title.ToLower().StartsWith(dto.Title.ToLower()))
+			.ThenByDescending(x => x.Title.ToLower().EndsWith(dto.Title.ToLower()))
+			.ThenByDescending(x => x.Title.ToLower().Contains(dto.Title.ToLower()))
+			.ThenByDescending(x => x.Content.ToLower().Contains(dto.Title.ToLower()));
+		}
+		if(dto.Order == OrderBy.Asc)
+			query = query.ThenBy(x => x.Created);
+		else if(dto.Order == OrderBy.Desc)
+			query = query.ThenByDescending(x => x.Created);
+		return (await _paginator.PaginateAsync(query, @params)).Select(x => _viewModel.ToBase(x));
 	}
 
 	public async Task<bool> UpdateAsync(ArticleCreateDto dto, int id)

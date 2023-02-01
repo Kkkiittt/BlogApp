@@ -1,1 +1,8 @@
-﻿
+﻿@using BlogApp.Service.Dtos.Users;
+@model UserRegisterDto
+<form asp-action="update" asp-controller="users" method="post">
+	<input type="text" asp-for=Name>
+	<input type="email" asp-for=Email>
+	<input type="password" asp-for=Password>
+	<input type="submit">
+</form>

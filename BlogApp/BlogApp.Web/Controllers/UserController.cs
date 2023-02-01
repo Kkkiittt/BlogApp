@@ -76,14 +76,21 @@ public class UserController : Controller
 	{
 		try
 		{
-			return View("Info", await _service.GetAsync(null));
+			ViewBag.Id = 1;
+			var user = await _service.GetAsync(null);
+			return View("Info", new UserRegisterDto
+			{
+				Email = user.Email,
+				Name = user.Name,
+				Password = ""
+			});
 		}
 		catch(Exception ex) when(ex.Message == "Unauthorized")
 		{
 			return RedirectToAction("login", "users");
 		}
 	}
-	[HttpPut("")]
+	[HttpPost("update")]
 	public async Task<IActionResult> UpdateAsync(UserRegisterDto dto)
 	{
 		if(ModelState.IsValid)

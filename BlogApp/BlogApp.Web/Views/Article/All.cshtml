@@ -1,8 +1,20 @@
-﻿@using BlogApp.Service.ViewModels.Articles;
-@model IEnumerable<ArticleBaseViewModel>
+﻿@using BlogApp.Service.Dtos.Articles;
+@using BlogApp.Service.ViewModels.Articles;
+@model ArticleViewDto
 @{
-	<h1>@ViewBag.Title</h1>
-	foreach(var article in Model)
+	<form asp-action="search" asp-controller="articles">
+		<input type="text" asp-for=Title>
+		<input type="submit" value="Search!">
+		<select class="form-select form-select-sm bg-dark" aria-label="Order by"
+			style="width:50%;" asp-for=Order>
+			<option value=1>Old first</option>
+			<option value=-1>New first</option>
+			<option value=0>Not ordered</option>
+		</select>
+	</form>
+	<br>
+	<br>
+	foreach(var article in Model.Articles)
 	{
 		<div>
 			<h2 style="float:left">@article.Title</h2>

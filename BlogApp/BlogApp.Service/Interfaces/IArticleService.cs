@@ -12,5 +12,5 @@ public interface IArticleService
 	public Task<IEnumerable<ArticleBaseViewModel>> GetAllAsync(PaginationParams @params);
 	public Task<ArticleViewModel> GetAsync(int id);
 	public Task<ArticleViewModel> GetAsync(string name);
-	public Task<IEnumerable<ArticleBaseViewModel>> SearchAsync(string name, PaginationParams @params);
+	public Task<IEnumerable<ArticleBaseViewModel>> SearchAsync(ArticleViewDto dto, PaginationParams @params);
 }
